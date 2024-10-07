@@ -13,7 +13,7 @@ from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
 from langchain.schema import HumanMessage, AIMessage, SystemMessage
 
-from constants import SYSTEM_MESSAGE, MODELS
+from constants import SYS_MSG_SEO_ARTICLE_GENERATOR, SYS_MSG_SEO_OUTLINER, MODELS
 
 dotenv.load_dotenv()
 
@@ -40,20 +40,36 @@ class ChatSession(BaseModel):
     id: str
     messages: List[Message] = []
     model: str
+    system_prompt: str  # Add this line
 
 # This will act as our simple database
 chat_sessions = {}
 
-@app.post("/chat_sessions/", response_model=ChatSession)
-async def create_chat_session(
+
+@app.post("/chat_sessions/SYS_MSG_SEO_OUTLINER", response_model=ChatSession)
+async def create_chat_session_outliner(
     model: str = "anthropic/claude-3-5-sonnet-20240620",
     api_key: str = Depends(get_api_key)
 ):
-    session_id = str("1")
-    """ uuid.uuid4() """
+    session_id = str(uuid.uuid4())
     chat_session = ChatSession(
         id=session_id,
-        model=model
+        model=model,
+        system_prompt=SYS_MSG_SEO_OUTLINER
+    )
+    chat_sessions[session_id] = chat_session
+    return chat_session
+
+@app.post("/chat_sessions/SYS_MSG_SEO_ARTICLE_GENERATOR", response_model=ChatSession)
+async def create_chat_session_article_generator(
+    model: str = "anthropic/claude-3-5-sonnet-20240620",
+    api_key: str = Depends(get_api_key)
+):
+    session_id = str(uuid.uuid4())
+    chat_session = ChatSession(
+        id=session_id,
+        model=model,
+        system_prompt=SYS_MSG_SEO_ARTICLE_GENERATOR
     )
     chat_sessions[session_id] = chat_session
     return chat_session
@@ -83,7 +99,7 @@ async def get_ai_response(session_id: str, api_key: str = Depends(get_api_key)):
 
     # Prepare messages for the AI model
     messages = [
-        SystemMessage(content=SYSTEM_MESSAGE)
+        SystemMessage(content=session.system_prompt)  # Use the session's system prompt
     ]
     for msg in session.messages:
         if msg.role == "user":
