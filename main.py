@@ -8,6 +8,7 @@ import uuid
 from fastapi.security import APIKeyHeader
 from fastapi import Security
 import logging
+from fastapi.middleware.cors import CORSMiddleware  # Add this import
 
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
@@ -22,6 +23,15 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(leve
 logger = logging.getLogger(__name__)
 
 app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Adjust this to match your Next.js app's URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # API key security
 API_KEY = os.getenv("API_KEY")
