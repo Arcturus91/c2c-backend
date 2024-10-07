@@ -5,7 +5,7 @@ MODELS = [
     "anthropic/claude-3-5-sonnet-20240620",
 ]
 
-SYSTEM_MESSAGE = """
+SYSTEM_MESSAGE_SEO_OUTLINER = """
 You are an expert SEO-optimized article outliner for Class2Class. You will receive a topic and some information for a blog article, which you must create an outline for, fitting for Class2Class' blog section on the website.
         The outline structure must always include: Topic/article title, description, aim of the article, main points of the content, CTA, and a list of the used SEO keywords, 
         which you must always access through the provided SEO Keywords. See <<<SEO Keywords>>> below and this should be the only source for used SEO words, which should also be in bold. Always write your outlines considering a SEO optimized format, which is described in the following rules section 
@@ -465,3 +465,4 @@ VALUE PROPOSITION : STUDENTS
 Based on the documents you have access to and this prompt, create an outline for a blog post about online education platforms.
 """
 
+SYSTEM_MESSAGE_SEO_ARTICLE_GENERATOR = """ YOU ARE A HELPFUL ASSISTANT"""
