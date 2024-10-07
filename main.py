@@ -46,7 +46,7 @@ chat_sessions = {}
 
 @app.post("/chat_sessions/", response_model=ChatSession)
 async def create_chat_session(
-    model: str = "openai/gpt-4o",
+    model: str = "anthropic/claude-3-5-sonnet-20240620",
     api_key: str = Depends(get_api_key)
 ):
     session_id = str("1")
